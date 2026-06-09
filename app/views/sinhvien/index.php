@@ -109,6 +109,23 @@
         </tr>
     <?php endforeach; ?>
     </table>
-    
+   <div style="text-align:center; margin-top:20px;">
+
+    <?php if ($currentPage > 1): ?>
+        <a href="?page=<?= $currentPage - 1 ?>" style="padding:8px 12px;">⬅ Trước</a>
+    <?php endif; ?>
+
+    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+        <a href="?page=<?= $i ?>"
+           style="padding:8px 12px; <?= $i == $currentPage ? 'font-weight:bold;color:red;' : '' ?>">
+            <?= $i ?>
+        </a>
+    <?php endfor; ?>
+
+    <?php if ($currentPage < $totalPages): ?>
+        <a href="?page=<?= $currentPage + 1 ?>" style="padding:8px 12px;">Sau ➡</a>
+    <?php endif; ?>
+
+</div>
 </body>
 </html>
