@@ -108,7 +108,7 @@
     <div class="container">
         <h1>Thêm Sinh Viên</h1>
         
-        <form action="/PMNM_68PM3_TrieuHuongGiang_0009168/sinhvien/store" method="post">
+        <form action="/sinhvien/store" method="post">
             <div class="form-group">
                 <label for="ma_sv">Mã sinh viên</label>
                 <input type="text" id="ma_sv" name="ma_sv" placeholder="VD: SV001" required>
