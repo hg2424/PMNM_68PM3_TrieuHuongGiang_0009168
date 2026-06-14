@@ -74,7 +74,7 @@
             color:white;
         }
 
-        input {
+        input, select {
             padding:6px;
         }
     </style>
@@ -83,8 +83,53 @@
 <body>
 
 <h1>Danh sách sinh viên</h1>
+<a href="/home" class="btn btn-secondary mb-3">
+    <i class="fas fa-home"></i> Trang chủ
+</a>
+<?php
+$page = $currentPage ?? 1;
+$search = $search ?? '';
+$ma_lop = $ma_lop ?? '';
+
+function buildQuery($page, $search, $ma_lop) {
+    return http_build_query([
+        'page' => $page,
+        'search' => $search,
+        'ma_lop' => $ma_lop
+    ]);
+}
+?>
+
+<form method="GET" style="margin-bottom:20px;display:flex;gap:10px;align-items:center;">
+
+    <input type="text"
+           name="search"
+           placeholder="Tìm theo họ tên..."
+           value="<?= htmlspecialchars($search) ?>">
+
+    <select name="ma_lop" onchange="this.form.submit()">
+
+        <option value="" <?= $ma_lop == '' ? 'selected' : '' ?>>
+            Tất cả lớp
+        </option>
+
+        <?php foreach($lops as $lop): ?>
+            <option value="<?= $lop['ma_lop'] ?>"
+                <?= ($ma_lop == $lop['ma_lop']) ? 'selected' : '' ?>>
+                <?= $lop['ma_lop'] ?>
+            </option>
+        <?php endforeach; ?>
+
+    </select>
+
+    <button type="submit"
+            style="background:#3498db;color:white;border:none;padding:8px 15px;border-radius:5px;cursor:pointer;">
+        Tìm kiếm
+    </button>
+</form>
 
 <table>
+
 <thead>
 <tr>
     <th>STT</th>
@@ -101,20 +146,23 @@
 <tbody>
 
 <?php foreach ($sinhviens as $index => $sv): ?>
+
+<?php $q = buildQuery($page, $search, $ma_lop); ?>
+
 <tr>
 
-    <td><?= ($currentPage - 1) * 5 + $index + 1 ?></td>
+    <td><?= (($page - 1) * 5) + $index + 1 ?></td>
 
     <td><?= htmlspecialchars($sv['ma_sv']) ?></td>
     <td><?= htmlspecialchars($sv['ho_ten']) ?></td>
     <td><?= htmlspecialchars($sv['gioi_tinh']) ?></td>
     <td><?= htmlspecialchars($sv['ngay_sinh']) ?></td>
     <td><?= htmlspecialchars($sv['dia_chi']) ?></td>
-    <td><?= htmlspecialchars($sv['lop']) ?></td>
+    <td><?= htmlspecialchars($sv['ma_lop']) ?></td>
 
     <td>
         <a class="btn edit"
-           href="/sinhvien/index?page=<?= $currentPage ?>&edit=<?= $sv['id'] ?>">
+           href="/sinhvien/index?<?= $q ?>&edit=<?= $sv['id'] ?>">
             Sửa
         </a>
 
@@ -126,27 +174,27 @@
     </td>
 </tr>
 
-<!-- INLINE EDIT -->
 <?php if (isset($_GET['edit']) && $_GET['edit'] == $sv['id']): ?>
 <tr>
 <td colspan="8">
 
 <form method="post"
       action="/sinhvien/update/<?= $sv['id'] ?>"
-      style="display:flex; gap:10px; flex-wrap:wrap;">
+      style="display:flex;gap:10px;flex-wrap:wrap;">
 
     <input name="ma_sv" value="<?= $sv['ma_sv'] ?>" required>
     <input name="ho_ten" value="<?= $sv['ho_ten'] ?>" required>
     <input name="gioi_tinh" value="<?= $sv['gioi_tinh'] ?>" required>
     <input type="date" name="ngay_sinh" value="<?= $sv['ngay_sinh'] ?>" required>
     <input name="dia_chi" value="<?= $sv['dia_chi'] ?>">
-    <input name="lop" value="<?= $sv['lop'] ?>" required>
+    <input name="ma_lop" value="<?= $sv['ma_lop'] ?>" required>
 
-    <button type="submit" style="background:#2ecc71;color:white;padding:6px 10px;border:none;">
+    <button type="submit"
+            style="background:#2ecc71;color:white;padding:6px 10px;border:none;">
         Lưu
     </button>
 
-    <a href="/sinhvien/index?page=<?= $currentPage ?>"
+    <a href="/sinhvien/index?<?= $q ?>"
        style="background:#95a5a6;color:white;padding:6px 10px;text-decoration:none;">
         Hủy
     </a>
@@ -162,22 +210,21 @@
 </tbody>
 </table>
 
-<!-- PAGINATION -->
 <div class="pagination">
 
-<?php if ($currentPage > 1): ?>
-    <a href="/sinhvien/index?page=<?= $currentPage - 1 ?>">⬅</a>
+<?php if ($page > 1): ?>
+    <a href="/sinhvien/index?<?= buildQuery($page - 1, $search, $ma_lop) ?>">⬅</a>
 <?php endif; ?>
 
-<?php for ($i = 1; $i <= $totalPages; $i++): ?>
-    <a class="<?= ($i == $currentPage) ? 'active' : '' ?>"
-       href="/sinhvien/index?page=<?= $i ?>">
+<?php for ($i = 1; $i <= ($totalPages ?? 1); $i++): ?>
+    <a class="<?= ($i == $page) ? 'active' : '' ?>"
+       href="/sinhvien/index?<?= buildQuery($i, $search, $ma_lop) ?>">
         <?= $i ?>
     </a>
 <?php endfor; ?>
 
-<?php if ($currentPage < $totalPages): ?>
-    <a href="/sinhvien/index?page=<?= $currentPage + 1 ?>">➡</a>
+<?php if ($page < ($totalPages ?? 1)): ?>
+    <a href="/sinhvien/index?<?= buildQuery($page + 1, $search, $ma_lop) ?>">➡</a>
 <?php endif; ?>
 
 </div>
