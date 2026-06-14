@@ -2,13 +2,15 @@
 
 class lop extends Controller
 {
-    public function index()
+   public function index()
 {
-    $limit = 5;
+    $limit = isset($_GET['pageSize']) ? (int)$_GET['pageSize'] : 5;
+    if ($limit <= 0) {
+        $limit = 5;
+    }
 
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-
-    if($page < 1){
+    if ($page < 1) {
         $page = 1;
     }
 
@@ -18,23 +20,23 @@ class lop extends Controller
 
     $model = $this->model('lopModel');
 
-    $result = $model->paging($limit,$offset,$search);
+    $result = $model->paging($limit, $offset, $search);
 
     $editLop = null;
-
-    if(isset($_GET['edit']))
-    {
+    if (isset($_GET['edit'])) {
         $editLop = $model->find($_GET['edit']);
     }
 
-    $this->view("layout/masterlayout",[
-        'viewname'=>'lop/index',
-        'lops'=>$result['lops'],
-        'totalPages'=>$result['totalPages'],
-        'currentPage'=>$page,
-        'search'=>$search,
+    $this->view("layout/masterlayout", [
+        'viewname' => 'lop/index',
+        'lops' => $result['lops'],
+        'totalPages' => $result['totalPages'],
 
-        'editLop'=>$editLop
+        'currentPage' => $page,
+        'pageSize' => $limit,   
+
+        'search' => $search,
+        'editLop' => $editLop
     ]);
 }
 

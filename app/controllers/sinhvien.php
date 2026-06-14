@@ -4,33 +4,39 @@ require_once '../app/core/controller.php';
 
 class sinhvien extends Controller
 {
-    public function index()
-    {
-        
-        $limit = 5;
+   public function index()
+{
+    $limit = isset($_GET['pageSize']) ? (int)$_GET['pageSize'] : 5;
+    if ($limit <= 0) $limit = 5;
 
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        if ($page < 1) $page = 1;
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    if ($page < 1) $page = 1;
 
-        $offset = ($page - 1) * $limit;
-        $search = $_GET['search'] ?? '';
-        $ma_lop = $_GET['ma_lop'] ?? '';
+    $offset = ($page - 1) * $limit;
 
-        $model = $this->model('sinhvienModel');
-        $lopModel = $this->model('lopModel');
-        $lops = $lopModel->getAll();
-        $result = $model->paging($limit, $offset, $search, $ma_lop);
+    $search = $_GET['search'] ?? '';
+    $ma_lop = $_GET['ma_lop'] ?? '';
 
-        $this->view("layout/masterlayout", [
-            'viewname' => 'sinhvien/index',
-            'sinhviens' => $result['sinhviens'],
-            'totalPages' => $result['totalPages'],
-            'currentPage' => $page,
-            'search' => $search,
-            'lops' => $lops,
-            'ma_lop' => $ma_lop
-        ]);
-    }
+    $model = $this->model('sinhvienModel');
+    $lopModel = $this->model('lopModel');
+
+    $lops = $lopModel->getAll();
+    $result = $model->paging($limit, $offset, $search, $ma_lop);
+
+
+    $this->view("layout/masterlayout", [
+        'viewname' => 'sinhvien/index',
+        'sinhviens' => $result['sinhviens'],
+        'totalPages' => $result['totalPages'],
+
+        'currentPage' => $page,
+        'pageSize' => $limit,   
+
+        'search' => $search,
+        'lops' => $lops,
+        'ma_lop' => $ma_lop
+    ]);
+}
 
     public function create()
     {

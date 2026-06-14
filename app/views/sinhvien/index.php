@@ -2,8 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?? 'Danh sách sinh viên' ?></title>
 
     <style>
@@ -83,19 +81,19 @@
 <body>
 
 <h1>Danh sách sinh viên</h1>
-<a href="/home" class="btn btn-secondary mb-3">
-    <i class="fas fa-home"></i> Trang chủ
-</a>
+
 <?php
 $page = $currentPage ?? 1;
+$pageSize = $pageSize ?? 5;
 $search = $search ?? '';
 $ma_lop = $ma_lop ?? '';
 
-function buildQuery($page, $search, $ma_lop) {
+function buildQuery($page, $search, $ma_lop, $pageSize) {
     return http_build_query([
         'page' => $page,
         'search' => $search,
-        'ma_lop' => $ma_lop
+        'ma_lop' => $ma_lop,
+        'pageSize' => $pageSize
     ]);
 }
 ?>
@@ -108,18 +106,19 @@ function buildQuery($page, $search, $ma_lop) {
            value="<?= htmlspecialchars($search) ?>">
 
     <select name="ma_lop" onchange="this.form.submit()">
-
-        <option value="" <?= $ma_lop == '' ? 'selected' : '' ?>>
-            Tất cả lớp
-        </option>
-
+        <option value="">Tất cả lớp</option>
         <?php foreach($lops as $lop): ?>
             <option value="<?= $lop['ma_lop'] ?>"
                 <?= ($ma_lop == $lop['ma_lop']) ? 'selected' : '' ?>>
                 <?= $lop['ma_lop'] ?>
             </option>
         <?php endforeach; ?>
+    </select>
 
+    <select name="pageSize" onchange="this.form.submit()">
+        <option value="5"  <?= ($pageSize == 5) ? 'selected' : '' ?>>5 / trang</option>
+        <option value="10" <?= ($pageSize == 10) ? 'selected' : '' ?>>10 / trang</option>
+        <option value="20" <?= ($pageSize == 20) ? 'selected' : '' ?>>20 / trang</option>
     </select>
 
     <button type="submit"
@@ -129,7 +128,6 @@ function buildQuery($page, $search, $ma_lop) {
 </form>
 
 <table>
-
 <thead>
 <tr>
     <th>STT</th>
@@ -147,11 +145,10 @@ function buildQuery($page, $search, $ma_lop) {
 
 <?php foreach ($sinhviens as $index => $sv): ?>
 
-<?php $q = buildQuery($page, $search, $ma_lop); ?>
+<?php $q = buildQuery($page, $search, $ma_lop, $pageSize); ?>
 
 <tr>
-
-    <td><?= (($page - 1) * 5) + $index + 1 ?></td>
+    <td><?= (($page - 1) * $pageSize) + $index + 1 ?></td>
 
     <td><?= htmlspecialchars($sv['ma_sv']) ?></td>
     <td><?= htmlspecialchars($sv['ho_ten']) ?></td>
@@ -174,37 +171,6 @@ function buildQuery($page, $search, $ma_lop) {
     </td>
 </tr>
 
-<?php if (isset($_GET['edit']) && $_GET['edit'] == $sv['id']): ?>
-<tr>
-<td colspan="8">
-
-<form method="post"
-      action="/sinhvien/update/<?= $sv['id'] ?>"
-      style="display:flex;gap:10px;flex-wrap:wrap;">
-
-    <input name="ma_sv" value="<?= $sv['ma_sv'] ?>" required>
-    <input name="ho_ten" value="<?= $sv['ho_ten'] ?>" required>
-    <input name="gioi_tinh" value="<?= $sv['gioi_tinh'] ?>" required>
-    <input type="date" name="ngay_sinh" value="<?= $sv['ngay_sinh'] ?>" required>
-    <input name="dia_chi" value="<?= $sv['dia_chi'] ?>">
-    <input name="ma_lop" value="<?= $sv['ma_lop'] ?>" required>
-
-    <button type="submit"
-            style="background:#2ecc71;color:white;padding:6px 10px;border:none;">
-        Lưu
-    </button>
-
-    <a href="/sinhvien/index?<?= $q ?>"
-       style="background:#95a5a6;color:white;padding:6px 10px;text-decoration:none;">
-        Hủy
-    </a>
-
-</form>
-
-</td>
-</tr>
-<?php endif; ?>
-
 <?php endforeach; ?>
 
 </tbody>
@@ -213,18 +179,18 @@ function buildQuery($page, $search, $ma_lop) {
 <div class="pagination">
 
 <?php if ($page > 1): ?>
-    <a href="/sinhvien/index?<?= buildQuery($page - 1, $search, $ma_lop) ?>">⬅</a>
+    <a href="/sinhvien/index?<?= buildQuery($page - 1, $search, $ma_lop, $pageSize) ?>">⬅</a>
 <?php endif; ?>
 
 <?php for ($i = 1; $i <= ($totalPages ?? 1); $i++): ?>
     <a class="<?= ($i == $page) ? 'active' : '' ?>"
-       href="/sinhvien/index?<?= buildQuery($i, $search, $ma_lop) ?>">
+       href="/sinhvien/index?<?= buildQuery($i, $search, $ma_lop, $pageSize) ?>">
         <?= $i ?>
     </a>
 <?php endfor; ?>
 
 <?php if ($page < ($totalPages ?? 1)): ?>
-    <a href="/sinhvien/index?<?= buildQuery($page + 1, $search, $ma_lop) ?>">➡</a>
+    <a href="/sinhvien/index?<?= buildQuery($page + 1, $search, $ma_lop, $pageSize) ?>">➡</a>
 <?php endif; ?>
 
 </div>

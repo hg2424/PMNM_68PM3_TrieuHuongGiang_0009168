@@ -43,20 +43,33 @@
 
     <div class="card mb-4">
         <div class="card-body">
-            <form method="GET" class="row g-3">
-                <div class="col-md-8">
-                    <input type="text" 
-                           name="search" 
-                           class="form-control form-control-lg"
-                           placeholder="Tìm theo mã lớp hoặc tên lớp..."
-                           value="<?= htmlspecialchars($search ?? '') ?>">
-                </div>
-                <div class="col-md-4">
-                    <button type="submit" class="btn btn-primary btn-lg w-100">
-                        <i class="fas fa-search"></i> Tìm kiếm
-                    </button>
-                </div>
-            </form>
+           <form method="GET" class="row g-3 align-items-center">
+    <div class="col-md-6">
+        <input type="text" 
+               name="search" 
+               class="form-control form-control-lg"
+               placeholder="Tìm theo mã lớp hoặc tên lớp..."
+               value="<?= htmlspecialchars($search ?? '') ?>">
+    </div>
+
+    <div class="col-md-2">
+        <select name="pageSize" class="form-select form-control-lg"
+                onchange="this.form.submit()">
+
+            <option value="5"  <?= ($pageSize ?? 5) == 5 ? 'selected' : '' ?>>5 /trang</option>
+            <option value="10" <?= ($pageSize ?? 5) == 10 ? 'selected' : '' ?>>10 /trang</option>
+            <option value="20" <?= ($pageSize ?? 5) == 20 ? 'selected' : '' ?>>20 /trang</option>
+
+        </select>
+    </div>
+
+    <div class="col-md-4">
+        <button type="submit" class="btn btn-primary btn-lg w-100">
+            <i class="fas fa-search"></i> Tìm kiếm
+        </button>
+    </div>
+
+</form>
         </div>
     </div>
 
