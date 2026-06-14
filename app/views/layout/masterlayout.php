@@ -132,9 +132,26 @@
     </div>
 
     <div class="menu">
+
+    <?php if(strpos($viewname,'sinhvien') !== false): ?>
+
         <a href="/sinhvien/index">Danh sách sinh viên</a>
+
         <a href="/sinhvien/create">Thêm sinh viên</a>
-    </div>
+
+        <a href="/lop/index">Quản lý lớp học</a>
+        <a href="/home/index">Trang chủ</a>
+
+    <?php endif; ?>
+
+    <?php if(strpos($viewname,'lop') !== false): ?>
+
+        <a href="/sinhvien/index">Quản lý sinh viên</a>
+        <a href="/home/index">Trang chủ</a>
+
+    <?php endif; ?>
+
+</div>
 </header>
 
 <div class="content">

@@ -1,10 +1,23 @@
 <?php
-class home
+class home extends Controller
 {
-  public function index()
-  {
-    echo "Đây là trang chủ";
-  }
+    public function index()
+    {
+        $svModel = $this->model('sinhvienModel');
+        $lopModel = $this->model('lopModel');
+
+        $totalSV = $svModel->countAll();
+        $totalLop = $lopModel->countAll();
+
+        $active = $svModel->countActive();
+
+        $this->view('home/index', [
+            'totalSV' => $totalSV,
+            'totalLop' => $totalLop,
+            'active' => $active
+        ]);
+    }
+
 
   public function about()
   {
@@ -15,4 +28,5 @@ class home
     require_once '../app/views/home/login.php';
 
   }
+
 }

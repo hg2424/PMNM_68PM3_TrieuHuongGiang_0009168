@@ -3,159 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng Nhập</title>
+    <title>Đăng Nhập - Quản Lý Sinh Viên</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
         }
 
-        .login-container {
+        .login-card {
             background: white;
-            padding: 45px 40px;
-            border-radius: 16px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
             max-width: 420px;
+            width: 100%;
         }
 
-        .header {
+        .login-header {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 35px 30px;
             text-align: center;
-            margin-bottom: 35px;
         }
 
-        .header h1 {
-            color: #333;
-            font-size: 28px;
+        .login-header i {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .login-body {
+            padding: 40px 35px;
+        }
+
+        .form-label {
             font-weight: 600;
-        }
-
-        .header p {
-            color: #666;
-            margin-top: 8px;
-            font-size: 15px;
-        }
-
-        .form-group {
-            margin-bottom: 22px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
             color: #444;
         }
 
-        input {
-            width: 100%;
-            padding: 13px 15px;
-            border: 2px solid #e1e1e1;
-            border-radius: 8px;
+        .form-control {
+            padding: 14px 16px;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
             font-size: 16px;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
 
-        input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        .form-control:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.15);
         }
 
-        .password-wrapper {
-            position: relative;
+        .input-group-text {
+            background: #f8f9fa;
+            border-radius: 10px 0 0 10px;
         }
 
-        .remember-forgot {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-
-        .remember {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        button {
-            width: 100%;
+        .btn-login {
             padding: 14px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 17px;
+            font-size: 18px;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            transition: all 0.3s;
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        .btn-login:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
         }
 
-        .register-link {
-            text-align: center;
-            margin-top: 25px;
-            font-size: 15px;
-        }
-
-        .register-link a {
+        .forgot-link {
             color: #667eea;
             text-decoration: none;
-            font-weight: 500;
+            font-size: 14.5px;
         }
 
-        .register-link a:hover {
+        .forgot-link:hover {
             text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="header">
-            <h1>Đăng Nhập</h1>
-            <p>Chào mừng bạn quay trở lại</p>
+
+    <div class="login-card">
+        <div class="login-header">
+            <i class="fas fa-graduation-cap"></i>
+            <h2 class="mb-1 fw-bold">QL Sinh Viên</h2>
+            <p class="mb-0">Hệ thống quản lý sinh viên & lớp học</p>
         </div>
 
-        <form action="/auth/login" method="post">
-            <div class="form-group">
-                <label for="username">Tên đăng nhập</label>
-                <input type="text" id="username" name="username" placeholder="Nhập tên đăng nhập" required>
-            </div>
 
-            <div class="form-group">
-                <label for="password">Mật khẩu</label>
-                <div class="password-wrapper">
-                    <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required>
+        <div class="login-body">
+            <form action="/auth/login" method="post">
+                <div class="mb-4">
+                    <label class="form-label">Tên đăng nhập</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        <input type="text" class="form-control" name="username" 
+                               placeholder="Nhập tên đăng nhập" required>
+                    </div>
                 </div>
-            </div>
 
-            <div class="remember-forgot">
-                <label class="remember">
-                    <input type="checkbox" name="remember">
-                    Ghi nhớ tôi
-                </label>
-                <a href="#" style="color: #667eea;">Quên mật khẩu?</a>
-            </div>
+                <div class="mb-4">
+                    <label class="form-label">Mật khẩu</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" class="form-control" name="password" 
+                               placeholder="Nhập mật khẩu" required>
+                    </div>
+                </div>
 
-            <button type="submit">Đăng Nhập</button>
-        </form>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                        <label class="form-check-label" for="remember">Ghi nhớ tôi</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 btn-login">
+                    <i class="fas fa-sign-in-alt"></i> Đăng Nhập
+                </button>
+            </form>
+
+            <div class="text-center mt-4">
+                <small class="text-muted">Chưa có tài khoản? 
+                    <a href="#" class="text-primary fw-medium">Liên hệ quản trị viên</a>
+                </small>
+            </div>
+        </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

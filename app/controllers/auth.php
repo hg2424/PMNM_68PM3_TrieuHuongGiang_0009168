@@ -33,5 +33,12 @@ class auth
             require_once '../app/views/home/login.php';
         }
     }
+    public function logout()
+    {
+        session_start();
+        session_destroy();
+        header('Location: /home/login');
+        exit();
+}
 }
 ?>

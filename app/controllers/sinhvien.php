@@ -6,6 +6,7 @@ class sinhvien extends Controller
 {
     public function index()
     {
+        
         $limit = 5;
 
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -13,16 +14,21 @@ class sinhvien extends Controller
 
         $offset = ($page - 1) * $limit;
         $search = $_GET['search'] ?? '';
+        $ma_lop = $_GET['ma_lop'] ?? '';
 
         $model = $this->model('sinhvienModel');
-        $result = $model->paging($limit, $offset, $search);
+        $lopModel = $this->model('lopModel');
+        $lops = $lopModel->getAll();
+        $result = $model->paging($limit, $offset, $search, $ma_lop);
 
         $this->view("layout/masterlayout", [
             'viewname' => 'sinhvien/index',
             'sinhviens' => $result['sinhviens'],
             'totalPages' => $result['totalPages'],
             'currentPage' => $page,
-            'search' => $search
+            'search' => $search,
+            'lops' => $lops,
+            'ma_lop' => $ma_lop
         ]);
     }
 
@@ -43,7 +49,7 @@ class sinhvien extends Controller
                 'gioi_tinh' => $_POST['gioi_tinh'] ?? null,
                 'ngay_sinh' => $_POST['ngay_sinh'] ?? null,
                 'dia_chi'   => $_POST['dia_chi'] ?? null,
-                'lop'       => $_POST['lop'] ?? null
+                'ma_lop'    => $_POST['ma_lop'] ?? null
             ];
 
             if (empty($data['ho_ten'])) {
@@ -79,7 +85,6 @@ class sinhvien extends Controller
         exit();
     }
 
-    // 👉 sửa trực tiếp trong danh sách (KHÔNG cần view edit riêng)
     public function edit($id)
     {
         $model = $this->model('sinhvienModel');
@@ -91,7 +96,6 @@ class sinhvien extends Controller
             exit();
         }
 
-        // update ngay từ index (nếu bạn muốn làm inline form)
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $data = [
@@ -100,7 +104,7 @@ class sinhvien extends Controller
                 'gioi_tinh' => $_POST['gioi_tinh'],
                 'ngay_sinh' => $_POST['ngay_sinh'],
                 'dia_chi'   => $_POST['dia_chi'],
-                'lop'       => $_POST['lop']
+                'ma_lop'    => $_POST['ma_lop']
             ];
 
             $model->update($id, $data);
